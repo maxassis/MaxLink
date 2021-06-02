@@ -1,9 +1,38 @@
 import React from 'react'
-import { TouchableOpacity, View, TouchableWithoutFeedback } from 'react-native'
+import {
+  TouchableOpacity,
+  View,
+  TouchableWithoutFeedback,
+  Share,
+} from 'react-native'
 import { Feather } from '@expo/vector-icons'
+import Clipboard from 'expo-clipboard'
 import * as S from './styles'
 
 export default function ModalLink({ onClose }) {
+  function copyLink() {
+    Clipboard.setString('www.google.com')
+    alert('hehehe')
+  }
+
+  async function handleShare() {
+    try {
+      const result = await Share.share({
+        message: `Link: www.ig.com `,
+      })
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          console.log('ActivityType')
+        } else {
+          console.log('Compatilhado com sucesso')
+        }
+      }
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
   return (
     <S.ModalContainer>
       <TouchableWithoutFeedback onPress={onClose}>
@@ -15,7 +44,7 @@ export default function ModalLink({ onClose }) {
           <TouchableOpacity onPress={onClose}>
             <Feather name="x" color="#212743" size={30} />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleShare}>
             <Feather name="share" color="#212743" size={30} />
           </TouchableOpacity>
         </S.Header>
@@ -24,11 +53,12 @@ export default function ModalLink({ onClose }) {
           <S.Title>Link Encurtado</S.Title>
           <S.LongUrl numberOfLines={1}>https://www.google.com</S.LongUrl>
 
-          <S.ShortLinkArea onPress activeOpacity={1}>
+          <S.ShortLinkArea activeOpacity={1} onPress={copyLink}>
             <S.ShortLinkUrl numberOfLines={1}>
               https://bit/ly/sadas
             </S.ShortLinkUrl>
-            <TouchableOpacity>
+
+            <TouchableOpacity onPress={copyLink}>
               <Feather name="copy" color="#FFF" size={25} />
             </TouchableOpacity>
           </S.ShortLinkArea>
