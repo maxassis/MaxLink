@@ -2,9 +2,11 @@ import React from 'react'
 import { View, Text } from 'react-native'
 
 function MyLinks() {
-  ;<View>
+  return(
+  <View>
     <Text>Pagina Mylinks</Text>
   </View>
+  )
 }
 
 export default MyLinks
