@@ -4,6 +4,7 @@ import StatusBarPage from '../../components/StatusBarPage'
 import Menu from '../../components/Menu/index'
 import { Feather } from '@expo/vector-icons'
 import ModalLink from '../../components/ModalLink/index'
+import api from '../../services/api'
 
 import {
   TouchableWithoutFeedback,
@@ -14,12 +15,30 @@ import {
 import * as S from './styles'
 
 function Home() {
-  const [input, setInput] = useState('')
+  const [URL, setURL] = useState("")
   const [modalVisible, setModalVisible] = useState(false)
 
-  function handleShortLink() {
-    setModalVisible(true)
+  
+
+  async function handleShortLink() {
+    const test = URL
+
+
+  try{
+    const response = await api.post('/shorten',
+     {
+       long_url: test
+     })
+     console.log(response.data)
+
+  }catch{
+   alert('deu ruim')
+    Keyboard.dismiss()
+    setURL('')
+
   }
+
+}
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -54,9 +73,8 @@ function Home() {
                 placeholderTextColor="white"
                 autoCapitalize="none"
                 autoCorrect={false}
-                keyboardType="url"
-                value={input}
-                onChangeText={(Text) => setInput(Text)}
+                value={URL}
+                onChangeText={(Text) => setURL(Text)}
               />
             </S.ContainerInput>
 
