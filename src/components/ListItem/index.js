@@ -1,8 +1,17 @@
 import React from 'react'
-import { Text } from 'react-native'
-
-import {} from 'react-native'
+import { View } from 'react-native'
+import { Feather } from '@expo/vector-icons'
+import * as S from './styles'
 
 export default function ListItem() {
-  return <Text>meus links</Text>
+  return (
+    <View>
+      <S.ContainerButton>
+        <Feather name="link" color="#FFF" size={24} />
+        <S.Item numberOfLines={1}>
+          https://ezgif.com/video-to-gif/ezgif-6-aadaa681e9bb.mp4
+        </S.Item>
+      </S.ContainerButton>
+    </View>
+  )
 }

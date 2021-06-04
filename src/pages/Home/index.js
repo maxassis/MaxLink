@@ -4,6 +4,7 @@ import StatusBarPage from '../../components/StatusBarPage'
 import Menu from '../../components/Menu/index'
 import { Feather } from '@expo/vector-icons'
 import ModalLink from '../../components/ModalLink/index'
+
 import api from '../../services/api'
 
 import {
@@ -11,34 +12,37 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Modal,
+  ActivityIndicator,
 } from 'react-native'
 import * as S from './styles'
 
 function Home() {
-  const [URL, setURL] = useState("")
+  const [URL, setURL] = useState('')
   const [modalVisible, setModalVisible] = useState(false)
-
-  
+  const [loading, setLoading] = useState(false)
+  const [data, setData] = useState({})
 
   async function handleShortLink() {
+    setLoading(true)
+
     const test = URL
 
-
-  try{
-    const response = await api.post('/shorten',
-     {
-       long_url: test
-     })
-     console.log(response.data)
-
-  }catch{
-   alert('deu ruim')
-    Keyboard.dismiss()
-    setURL('')
-
+    try {
+      const response = await api.post('/shorten', {
+        long_url: test,
+      })
+      setData(response.data)
+      setModalVisible(true)
+      Keyboard.dismiss()
+      setLoading(false)
+      setURL('')
+    } catch {
+      alert('deu ruim')
+      Keyboard.dismiss()
+      setURL('')
+      setLoading(false)
+    }
   }
-
-}
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -79,13 +83,17 @@ function Home() {
             </S.ContainerInput>
 
             <S.ButtonLink onPress={handleShortLink}>
-              <S.ButtonLinkText>Gerar Link</S.ButtonLinkText>
+              {loading ? (
+                <ActivityIndicator color="#121212" size={24} />
+              ) : (
+                <S.ButtonLinkText>Gerar Link</S.ButtonLinkText>
+              )}
             </S.ButtonLink>
           </S.ContainerContent>
         </KeyboardAvoidingView>
 
         <Modal visible={modalVisible} transparent animationType="slide">
-          <ModalLink onClose={() => setModalVisible(false)} />
+          <ModalLink onClose={() => setModalVisible(false)} data={data} />
         </Modal>
       </LinearGradient>
     </TouchableWithoutFeedback>
