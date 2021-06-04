@@ -23,4 +23,11 @@ export async function saveLink(key, newLink) {
   console.log('link salvo com sucesso')
 }
 
-export async function deleteLink(Links, id) {}
+export async function deleteLink(links, id) {
+  let mylinks = links.filter((item) => {
+    return item.id !== id
+  })
+  await AsyncStorage.setItem('maxLink', JSON.stringify(mylinks))
+  console.log('Link deletado do storage')
+  return mylinks
+}
