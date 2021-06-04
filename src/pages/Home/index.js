@@ -6,6 +6,7 @@ import { Feather } from '@expo/vector-icons'
 import ModalLink from '../../components/ModalLink/index'
 
 import api from '../../services/api'
+import { saveLink } from '../../utils/storeLinks'
 
 import {
   TouchableWithoutFeedback,
@@ -33,6 +34,9 @@ function Home() {
       })
       setData(response.data)
       setModalVisible(true)
+
+      saveLink('maxLink', response.data)
+
       Keyboard.dismiss()
       setLoading(false)
       setURL('')
